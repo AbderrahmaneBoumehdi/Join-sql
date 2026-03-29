@@ -6,168 +6,149 @@
     <title>Les Jointures SQL - Présentation</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap');
         
         body {
             font-family: 'Inter', system_ui, sans-serif;
+            overflow: hidden;
         }
         .title-font {
             font-family: 'Space Grotesk', sans-serif;
         }
-        
+
         .slide {
+            height: 100vh;
             display: none;
-            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f172a 0%, #1e2937 100%);
         }
         .slide.active {
-            display: block;
+            display: flex;
         }
-        
+
+        .content {
+            max-width: 1100px;
+            width: 100%;
+            padding: 0 40px;
+        }
+
         .venn-container {
-            width: 420px;
-            height: 280px;
+            width: 380px;
+            height: 240px;
             margin: 0 auto;
         }
-        
+
         .nav-button {
             transition: all 0.3s ease;
         }
         .nav-button:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px 16px;
         }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-200">
 
-    <!-- Navigation fixe en bas -->
-    <div class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 border border-slate-700 rounded-3xl px-8 py-4 flex items-center gap-6 z-50 shadow-2xl">
-        <button onclick="prevSlide()" 
-                class="nav-button flex items-center gap-3 bg-slate-800 hover:bg-slate-700 px-6 py-3 rounded-2xl font-medium">
-            ← Précédent
-        </button>
-        
-        <div class="flex gap-3">
-            <button onclick="goToSlide(0)" id="dot-0" 
-                    class="w-4 h-4 rounded-full bg-cyan-400"></button>
-            <button onclick="goToSlide(1)" id="dot-1" 
-                    class="w-4 h-4 rounded-full bg-slate-600 hover:bg-slate-500"></button>
-            <button onclick="goToSlide(2)" id="dot-2" 
-                    class="w-4 h-4 rounded-full bg-slate-600 hover:bg-slate-500"></button>
-            <button onclick="goToSlide(3)" id="dot-3" 
-                    class="w-4 h-4 rounded-full bg-slate-600 hover:bg-slate-500"></button>
-            <button onclick="goToSlide(4)" id="dot-4" 
-                    class="w-4 h-4 rounded-full bg-slate-600 hover:bg-slate-500"></button>
-        </div>
-        
-        <button onclick="nextSlide()" 
-                class="nav-button flex items-center gap-3 bg-cyan-400 hover:bg-cyan-300 text-slate-950 px-8 py-3 rounded-2xl font-semibold">
-            Suivant →
-        </button>
-    </div>
-
     <!-- Slide 0 : Introduction -->
     <div id="slide-0" class="slide active">
-        <div class="max-w-6xl mx-auto px-8 pt-20">
-            <div class="text-center mb-16">
-                <div class="inline-flex items-center gap-3 bg-slate-800 px-6 py-3 rounded-3xl mb-6">
-                    <span class="text-3xl">🔗</span>
-                    <span class="font-semibold text-xl">Présentation SQL</span>
-                </div>
-                <h1 class="title-font text-7xl font-bold tracking-tighter mb-6">
-                    Les <span class="text-cyan-400">Jointures SQL</span>
-                </h1>
-                <p class="text-2xl text-slate-400 max-w-2xl mx-auto">
-                    Comprendre visuellement INNER, LEFT, RIGHT et CROSS JOIN
-                </p>
+        <div class="content text-center">
+            <div class="mb-8 inline-flex items-center gap-3 bg-slate-800 px-8 py-4 rounded-3xl">
+                <span class="text-4xl">🔗</span>
+                <span class="text-2xl font-semibold">Jointures en SQL</span>
             </div>
+            
+            <h1 class="title-font text-7xl font-bold tracking-tighter leading-none mb-6">
+                Les <span class="text-cyan-400">JOINTURES SQL</span>
+            </h1>
+            <p class="text-3xl text-slate-300 mb-16">Une présentation claire et visuelle</p>
 
-            <div class="venn-container">
-                <svg width="420" height="280" viewBox="0 0 420 280" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="160" cy="140" r="110" stroke="#22d3ee" stroke-width="18" fill="#22d3ee" fill-opacity="0.15"/>
-                    <circle cx="260" cy="140" r="110" stroke="#22d3ee" stroke-width="18" fill="#22d3ee" fill-opacity="0.15"/>
-                    <text x="105" y="90" font-size="28" fill="#67e8f9" font-weight="700">Table A</text>
-                    <text x="275" y="90" font-size="28" fill="#67e8f9" font-weight="700">Table B</text>
-                    <text x="210" y="165" font-size="32" fill="#ffffff" font-weight="700" text-anchor="middle">JOINTURE</text>
+            <div class="venn-container mb-10">
+                <svg width="380" height="240" viewBox="0 0 380 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="145" cy="120" r="95" stroke="#22d3ee" stroke-width="20" fill="#22d3ee" fill-opacity="0.15"/>
+                    <circle cx="235" cy="120" r="95" stroke="#22d3ee" stroke-width="20" fill="#22d3ee" fill-opacity="0.15"/>
+                    <text x="95" y="80" font-size="26" fill="#67e8f9" font-weight="700">Table A</text>
+                    <text x="255" y="80" font-size="26" fill="#67e8f9" font-weight="700">Table B</text>
+                    <text x="190" y="135" font-size="28" fill="#ffffff" font-weight="700" text-anchor="middle">JOINTURE</text>
                 </svg>
             </div>
 
-            <div class="text-center mt-12 text-slate-400">
-                Cliquez sur <strong class="text-cyan-400">"Suivant"</strong> pour commencer
-            </div>
+            <p class="text-slate-400 text-xl">Utilisez les boutons ci-dessous pour naviguer</p>
         </div>
     </div>
 
     <!-- Slide 1 : INNER JOIN -->
     <div id="slide-1" class="slide">
-        <div class="max-w-6xl mx-auto px-8 py-12">
-            <div class="flex justify-between items-center mb-10">
+        <div class="content">
+            <div class="flex justify-between items-start mb-10">
                 <div>
-                    <span class="px-5 py-2 bg-emerald-500 text-emerald-950 font-bold rounded-3xl text-sm">1 / 4</span>
+                    <span class="px-6 py-2 bg-emerald-500 text-emerald-950 font-bold rounded-3xl text-lg">1</span>
                     <h2 class="title-font text-6xl font-bold mt-4">INNER JOIN</h2>
-                    <p class="text-emerald-400 text-2xl">Seules les correspondances communes</p>
+                    <p class="text-emerald-400 text-2xl mt-2">Seules les lignes communes aux deux tables</p>
                 </div>
-                <div class="text-right">
-                    <code class="bg-slate-900 px-6 py-4 rounded-3xl text-emerald-400 text-sm font-mono block">
-                        Retourne uniquement les lignes présentes dans les DEUX tables
+                <div class="text-right max-w-xs">
+                    <code class="bg-slate-900 px-6 py-4 rounded-3xl text-sm font-mono text-emerald-300 block">
+                        Retourne uniquement les correspondances dans les DEUX tables
                     </code>
                 </div>
             </div>
 
-            <!-- Diagramme Venn -->
-            <div class="venn-container mb-12">
-                <svg width="420" height="280" viewBox="0 0 420 280" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="160" cy="140" r="105" stroke="#10b981" stroke-width="16" fill="#10b981" fill-opacity="0.15"/>
-                    <circle cx="260" cy="140" r="105" stroke="#10b981" stroke-width="16" fill="#10b981" fill-opacity="0.15"/>
-                    <ellipse cx="210" cy="140" rx="75" ry="105" fill="#10b981" fill-opacity="0.65"/>
-                    <text x="105" y="85" font-size="26" fill="#10b981" font-weight="700">Clients</text>
-                    <text x="275" y="85" font-size="26" fill="#10b981" font-weight="700">Commandes</text>
-                    <text x="210" y="155" font-size="36" fill="#052e16" font-weight="700" text-anchor="middle">✅</text>
-                </svg>
-            </div>
-
-            <!-- Tables -->
-            <div class="grid grid-cols-12 gap-8">
-                <!-- Table Clients -->
-                <div class="col-span-5 bg-slate-900 rounded-3xl p-8">
-                    <h3 class="font-bold text-xl mb-6 text-emerald-400">Clients (gauche)</h3>
-                    <table class="w-full font-mono text-sm">
-                        <thead><tr class="border-b border-slate-700"><th class="py-3 text-left">id</th><th class="py-3 text-left">nom</th></tr></thead>
-                        <tbody>
-                            <tr class="border-b border-slate-700"><td class="py-3">1</td><td>Alice</td></tr>
-                            <tr class="border-b border-slate-700"><td class="py-3">2</td><td>Bob</td></tr>
-                            <tr><td class="py-3">3</td><td>Charlie</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Table Commandes -->
-                <div class="col-span-5 bg-slate-900 rounded-3xl p-8">
-                    <h3 class="font-bold text-xl mb-6 text-emerald-400">Commandes (droite)</h3>
-                    <table class="w-full font-mono text-sm">
-                        <thead><tr class="border-b border-slate-700"><th class="py-3 text-left">id_client</th><th class="py-3 text-left">produit</th></tr></thead>
-                        <tbody>
-                            <tr class="border-b border-slate-700"><td class="py-3">1</td><td>Ordinateur</td></tr>
-                            <tr class="border-b border-slate-700"><td class="py-3">2</td><td>Souris</td></tr>
-                            <tr><td class="py-3">4</td><td>Clavier</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Résultat -->
-                <div class="col-span-12 bg-emerald-900/20 border border-emerald-400/30 rounded-3xl p-8 mt-8">
-                    <div class="flex items-center gap-4 mb-6">
-                        <span class="font-mono bg-emerald-400 text-emerald-950 px-5 py-2 rounded-3xl text-sm font-bold">RÉSULTAT</span>
-                        <code class="font-mono text-xs bg-slate-950 p-4 rounded-2xl flex-1 overflow-x-auto">
-                            INNER JOIN ON clients.id = commandes.id_client
-                        </code>
+            <div class="grid grid-cols-2 gap-12">
+                <!-- Venn -->
+                <div>
+                    <div class="venn-container">
+                        <svg width="380" height="240" viewBox="0 0 380 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="145" cy="120" r="95" stroke="#10b981" stroke-width="18" fill="#10b981" fill-opacity="0.2"/>
+                            <circle cx="235" cy="120" r="95" stroke="#10b981" stroke-width="18" fill="#10b981" fill-opacity="0.2"/>
+                            <ellipse cx="190" cy="120" rx="70" ry="95" fill="#10b981" fill-opacity="0.7"/>
+                            <text x="100" y="75" font-size="24" fill="#10b981" font-weight="700">Clients</text>
+                            <text x="255" y="75" font-size="24" fill="#10b981" font-weight="700">Commandes</text>
+                        </svg>
                     </div>
-                    <table class="w-full font-mono text-sm">
-                        <thead><tr class="border-b border-emerald-400"><th class="py-3 text-left">nom</th><th class="py-3 text-left">produit</th></tr></thead>
-                        <tbody>
-                            <tr class="border-b"><td class="py-3">Alice</td><td>Ordinateur</td></tr>
+                </div>
+
+                <!-- Tables + Résultat -->
+                <div class="space-y-8">
+                    <div class="grid grid-cols-2 gap-6">
+                        <!-- Table Gauche -->
+                        <div class="bg-slate-900 rounded-3xl p-6">
+                            <h3 class="font-bold text-emerald-400 mb-4">Clients (gauche)</h3>
+                            <table class="w-full text-sm font-mono">
+                                <tr class="border-b border-slate-700"><th class="text-left py-2">id</th><th class="text-left py-2">nom</th></tr>
+                                <tr class="border-b border-slate-700"><td class="py-2">1</td><td>Alice</td></tr>
+                                <tr class="border-b border-slate-700"><td class="py-2">2</td><td>Bob</td></tr>
+                                <tr><td class="py-2">3</td><td>Charlie</td></tr>
+                            </table>
+                        </div>
+                        <!-- Table Droite -->
+                        <div class="bg-slate-900 rounded-3xl p-6">
+                            <h3 class="font-bold text-emerald-400 mb-4">Commandes (droite)</h3>
+                            <table class="w-full text-sm font-mono">
+                                <tr class="border-b border-slate-700"><th class="text-left py-2">id_client</th><th class="text-left py-2">produit</th></tr>
+                                <tr class="border-b border-slate-700"><td class="py-2">1</td><td>Ordinateur</td></tr>
+                                <tr class="border-b border-slate-700"><td class="py-2">2</td><td>Souris</td></tr>
+                                <tr><td class="py-2">4</td><td>Clavier</td></tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Résultat -->
+                    <div class="bg-emerald-900/30 border border-emerald-400/40 rounded-3xl p-8">
+                        <div class="flex items-center gap-4 mb-6">
+                            <span class="font-mono bg-emerald-400 text-emerald-950 px-5 py-2 rounded-3xl text-sm font-bold">RÉSULTAT INNER JOIN</span>
+                        </div>
+                        <table class="w-full text-sm font-mono">
+                            <tr class="border-b border-emerald-400"><th class="text-left py-3">nom</th><th class="text-left py-3">produit</th></tr>
+                            <tr class="border-b border-slate-700"><td class="py-3">Alice</td><td>Ordinateur</td></tr>
                             <tr><td class="py-3">Bob</td><td>Souris</td></tr>
-                        </tbody>
-                    </table>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -175,61 +156,58 @@
 
     <!-- Slide 2 : LEFT JOIN -->
     <div id="slide-2" class="slide">
-        <div class="max-w-6xl mx-auto px-8 py-12">
-            <div class="flex justify-between items-center mb-10">
+        <div class="content">
+            <div class="flex justify-between items-start mb-10">
                 <div>
-                    <span class="px-5 py-2 bg-blue-500 text-blue-950 font-bold rounded-3xl text-sm">2 / 4</span>
+                    <span class="px-6 py-2 bg-blue-500 text-blue-950 font-bold rounded-3xl text-lg">2</span>
                     <h2 class="title-font text-6xl font-bold mt-4">LEFT OUTER JOIN</h2>
-                    <p class="text-blue-400 text-2xl">Tout de la table de gauche</p>
+                    <p class="text-blue-400 text-2xl mt-2">Toutes les lignes de la table de gauche</p>
                 </div>
             </div>
 
-            <div class="venn-container mb-12">
-                <svg width="420" height="280" viewBox="0 0 420 280" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="160" cy="140" r="105" stroke="#3b82f6" stroke-width="16" fill="#3b82f6" fill-opacity="0.75"/>
-                    <circle cx="260" cy="140" r="105" stroke="#3b82f6" stroke-width="16" fill="#3b82f6" fill-opacity="0.1"/>
-                    <text x="105" y="85" font-size="26" fill="#60a5fa" font-weight="700">Clients</text>
-                    <text x="275" y="85" font-size="26" fill="#60a5fa" font-weight="700">Commandes</text>
-                </svg>
-            </div>
-
-            <div class="grid grid-cols-12 gap-8">
-                <div class="col-span-5 bg-slate-900 rounded-3xl p-8">
-                    <h3 class="font-bold text-xl mb-6 text-blue-400">Clients (gauche)</h3>
-                    <table class="w-full font-mono text-sm">
-                        <thead><tr class="border-b border-slate-700"><th class="py-3 text-left">id</th><th class="py-3 text-left">nom</th></tr></thead>
-                        <tbody>
-                            <tr class="border-b border-slate-700"><td class="py-3">1</td><td>Alice</td></tr>
-                            <tr class="border-b border-slate-700"><td class="py-3">2</td><td>Bob</td></tr>
-                            <tr><td class="py-3">3</td><td>Charlie</td></tr>
-                        </tbody>
-                    </table>
+            <div class="grid grid-cols-2 gap-12">
+                <div class="venn-container">
+                    <svg width="380" height="240" viewBox="0 0 380 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="145" cy="120" r="95" stroke="#3b82f6" stroke-width="18" fill="#3b82f6" fill-opacity="0.75"/>
+                        <circle cx="235" cy="120" r="95" stroke="#3b82f6" stroke-width="18" fill="#3b82f6" fill-opacity="0.1"/>
+                        <text x="95" y="75" font-size="24" fill="#60a5fa" font-weight="700">Clients</text>
+                        <text x="260" y="75" font-size="24" fill="#60a5fa" font-weight="700">Commandes</text>
+                    </svg>
                 </div>
 
-                <div class="col-span-5 bg-slate-900 rounded-3xl p-8">
-                    <h3 class="font-bold text-xl mb-6 text-blue-400">Commandes (droite)</h3>
-                    <table class="w-full font-mono text-sm">
-                        <thead><tr class="border-b border-slate-700"><th class="py-3 text-left">id_client</th><th class="py-3 text-left">produit</th></tr></thead>
-                        <tbody>
-                            <tr class="border-b border-slate-700"><td class="py-3">1</td><td>Ordinateur</td></tr>
-                            <tr class="border-b border-slate-700"><td class="py-3">2</td><td>Souris</td></tr>
-                            <tr><td class="py-3">4</td><td>Clavier</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="col-span-12 bg-blue-900/20 border border-blue-400/30 rounded-3xl p-8 mt-8">
-                    <div class="flex items-center gap-4 mb-6">
-                        <span class="font-mono bg-blue-400 text-blue-950 px-5 py-2 rounded-3xl text-sm font-bold">LEFT JOIN</span>
+                <div class="space-y-8">
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="bg-slate-900 rounded-3xl p-6">
+                            <h3 class="font-bold text-blue-400 mb-4">Clients (gauche)</h3>
+                            <table class="w-full text-sm font-mono">
+                                <tr class="border-b border-slate-700"><th class="text-left py-2">id</th><th class="text-left py-2">nom</th></tr>
+                                <tr class="border-b border-slate-700"><td class="py-2">1</td><td>Alice</td></tr>
+                                <tr class="border-b border-slate-700"><td class="py-2">2</td><td>Bob</td></tr>
+                                <tr><td class="py-2">3</td><td>Charlie</td></tr>
+                            </table>
+                        </div>
+                        <div class="bg-slate-900 rounded-3xl p-6">
+                            <h3 class="font-bold text-blue-400 mb-4">Commandes (droite)</h3>
+                            <table class="w-full text-sm font-mono">
+                                <tr class="border-b border-slate-700"><th class="text-left py-2">id_client</th><th class="text-left py-2">produit</th></tr>
+                                <tr class="border-b border-slate-700"><td class="py-2">1</td><td>Ordinateur</td></tr>
+                                <tr class="border-b border-slate-700"><td class="py-2">2</td><td>Souris</td></tr>
+                                <tr><td class="py-2">4</td><td>Clavier</td></tr>
+                            </table>
+                        </div>
                     </div>
-                    <table class="w-full font-mono text-sm">
-                        <thead><tr class="border-b border-blue-400"><th class="py-3 text-left">nom</th><th class="py-3 text-left">produit</th></tr></thead>
-                        <tbody>
-                            <tr class="border-b"><td class="py-3">Alice</td><td>Ordinateur</td></tr>
-                            <tr class="border-b"><td class="py-3">Bob</td><td>Souris</td></tr>
+
+                    <div class="bg-blue-900/30 border border-blue-400/40 rounded-3xl p-8">
+                        <div class="flex items-center gap-4 mb-6">
+                            <span class="font-mono bg-blue-400 text-blue-950 px-5 py-2 rounded-3xl text-sm font-bold">LEFT OUTER JOIN</span>
+                        </div>
+                        <table class="w-full text-sm font-mono">
+                            <tr class="border-b border-blue-400"><th class="text-left py-3">nom</th><th class="text-left py-3">produit</th></tr>
+                            <tr class="border-b border-slate-700"><td class="py-3">Alice</td><td>Ordinateur</td></tr>
+                            <tr class="border-b border-slate-700"><td class="py-3">Bob</td><td>Souris</td></tr>
                             <tr><td class="py-3">Charlie</td><td class="text-slate-500">NULL</td></tr>
-                        </tbody>
-                    </table>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -237,60 +215,58 @@
 
     <!-- Slide 3 : RIGHT JOIN -->
     <div id="slide-3" class="slide">
-        <div class="max-w-6xl mx-auto px-8 py-12">
-            <div class="flex justify-between items-center mb-10">
+        <div class="content">
+            <div class="flex justify-between items-start mb-10">
                 <div>
-                    <span class="px-5 py-2 bg-purple-500 text-purple-950 font-bold rounded-3xl text-sm">3 / 4</span>
+                    <span class="px-6 py-2 bg-purple-500 text-purple-950 font-bold rounded-3xl text-lg">3</span>
                     <h2 class="title-font text-6xl font-bold mt-4">RIGHT OUTER JOIN</h2>
-                    <p class="text-purple-400 text-2xl">Tout de la table de droite</p>
+                    <p class="text-purple-400 text-2xl mt-2">Toutes les lignes de la table de droite</p>
                 </div>
             </div>
 
-            <div class="venn-container mb-12">
-                <svg width="420" height="280" viewBox="0 0 420 280" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="160" cy="140" r="105" stroke="#a855f7" stroke-width="16" fill="#a855f7" fill-opacity="0.1"/>
-                    <circle cx="260" cy="140" r="105" stroke="#a855f7" stroke-width="16" fill="#a855f7" fill-opacity="0.75"/>
-                    <text x="105" y="85" font-size="26" fill="#c084fc" font-weight="700">Clients</text>
-                    <text x="275" y="85" font-size="26" fill="#c084fc" font-weight="700">Commandes</text>
-                </svg>
-            </div>
-
-            <!-- Tables + résultat similaires (je les ai abrégés ici pour la clarté, mais le code complet est identique au pattern) -->
-            <div class="grid grid-cols-12 gap-8">
-                <div class="col-span-5 bg-slate-900 rounded-3xl p-8">
-                    <h3 class="font-bold text-xl mb-6 text-purple-400">Clients (gauche)</h3>
-                    <!-- même table que avant -->
-                    <table class="w-full font-mono text-sm">
-                        <thead><tr class="border-b border-slate-700"><th class="py-3 text-left">id</th><th class="py-3 text-left">nom</th></tr></thead>
-                        <tbody>
-                            <tr class="border-b border-slate-700"><td class="py-3">1</td><td>Alice</td></tr>
-                            <tr class="border-b border-slate-700"><td class="py-3">2</td><td>Bob</td></tr>
-                            <tr><td class="py-3">3</td><td>Charlie</td></tr>
-                        </tbody>
-                    </table>
+            <div class="grid grid-cols-2 gap-12">
+                <div class="venn-container">
+                    <svg width="380" height="240" viewBox="0 0 380 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="145" cy="120" r="95" stroke="#a855f7" stroke-width="18" fill="#a855f7" fill-opacity="0.1"/>
+                        <circle cx="235" cy="120" r="95" stroke="#a855f7" stroke-width="18" fill="#a855f7" fill-opacity="0.75"/>
+                        <text x="95" y="75" font-size="24" fill="#c084fc" font-weight="700">Clients</text>
+                        <text x="260" y="75" font-size="24" fill="#c084fc" font-weight="700">Commandes</text>
+                    </svg>
                 </div>
 
-                <div class="col-span-5 bg-slate-900 rounded-3xl p-8">
-                    <h3 class="font-bold text-xl mb-6 text-purple-400">Commandes (droite)</h3>
-                    <table class="w-full font-mono text-sm">
-                        <thead><tr class="border-b border-slate-700"><th class="py-3 text-left">id_client</th><th class="py-3 text-left">produit</th></tr></thead>
-                        <tbody>
-                            <tr class="border-b border-slate-700"><td class="py-3">1</td><td>Ordinateur</td></tr>
-                            <tr class="border-b border-slate-700"><td class="py-3">2</td><td>Souris</td></tr>
-                            <tr><td class="py-3">4</td><td>Clavier</td></tr>
-                        </tbody>
-                    </table>
-                </div>
+                <div class="space-y-8">
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="bg-slate-900 rounded-3xl p-6">
+                            <h3 class="font-bold text-purple-400 mb-4">Clients (gauche)</h3>
+                            <table class="w-full text-sm font-mono">
+                                <tr class="border-b border-slate-700"><th class="text-left py-2">id</th><th class="text-left py-2">nom</th></tr>
+                                <tr class="border-b border-slate-700"><td class="py-2">1</td><td>Alice</td></tr>
+                                <tr class="border-b border-slate-700"><td class="py-2">2</td><td>Bob</td></tr>
+                                <tr><td class="py-2">3</td><td>Charlie</td></tr>
+                            </table>
+                        </div>
+                        <div class="bg-slate-900 rounded-3xl p-6">
+                            <h3 class="font-bold text-purple-400 mb-4">Commandes (droite)</h3>
+                            <table class="w-full text-sm font-mono">
+                                <tr class="border-b border-slate-700"><th class="text-left py-2">id_client</th><th class="text-left py-2">produit</th></tr>
+                                <tr class="border-b border-slate-700"><td class="py-2">1</td><td>Ordinateur</td></tr>
+                                <tr class="border-b border-slate-700"><td class="py-2">2</td><td>Souris</td></tr>
+                                <tr><td class="py-2">4</td><td>Clavier</td></tr>
+                            </table>
+                        </div>
+                    </div>
 
-                <div class="col-span-12 bg-purple-900/20 border border-purple-400/30 rounded-3xl p-8 mt-8">
-                    <table class="w-full font-mono text-sm">
-                        <thead><tr class="border-b border-purple-400"><th class="py-3 text-left">nom</th><th class="py-3 text-left">produit</th></tr></thead>
-                        <tbody>
-                            <tr class="border-b"><td class="py-3">Alice</td><td>Ordinateur</td></tr>
-                            <tr class="border-b"><td class="py-3">Bob</td><td>Souris</td></tr>
+                    <div class="bg-purple-900/30 border border-purple-400/40 rounded-3xl p-8">
+                        <div class="flex items-center gap-4 mb-6">
+                            <span class="font-mono bg-purple-400 text-purple-950 px-5 py-2 rounded-3xl text-sm font-bold">RIGHT OUTER JOIN</span>
+                        </div>
+                        <table class="w-full text-sm font-mono">
+                            <tr class="border-b border-purple-400"><th class="text-left py-3">nom</th><th class="text-left py-3">produit</th></tr>
+                            <tr class="border-b border-slate-700"><td class="py-3">Alice</td><td>Ordinateur</td></tr>
+                            <tr class="border-b border-slate-700"><td class="py-3">Bob</td><td>Souris</td></tr>
                             <tr><td class="py-3 text-slate-500">NULL</td><td>Clavier</td></tr>
-                        </tbody>
-                    </table>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -298,35 +274,50 @@
 
     <!-- Slide 4 : CROSS JOIN -->
     <div id="slide-4" class="slide">
-        <div class="max-w-6xl mx-auto px-8 py-12">
-            <div class="flex justify-between items-center mb-10">
-                <div>
-                    <span class="px-5 py-2 bg-rose-500 text-rose-950 font-bold rounded-3xl text-sm">4 / 4</span>
-                    <h2 class="title-font text-6xl font-bold mt-4">CROSS JOIN</h2>
-                    <p class="text-rose-400 text-2xl">Produit cartésien - Toutes les combinaisons</p>
-                </div>
+        <div class="content text-center">
+            <div class="mb-12">
+                <span class="px-6 py-2 bg-rose-500 text-rose-950 font-bold rounded-3xl text-lg">4</span>
+                <h2 class="title-font text-6xl font-bold mt-4">CROSS JOIN</h2>
+                <p class="text-rose-400 text-3xl mt-3">Produit cartésien : Toutes les combinaisons possibles</p>
             </div>
 
             <div class="venn-container mb-12">
-                <svg width="420" height="280" viewBox="0 0 420 280" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="160" cy="140" r="105" stroke="#f43f5e" stroke-width="16" fill="#f43f5e" fill-opacity="0.25"/>
-                    <circle cx="260" cy="140" r="105" stroke="#f43f5e" stroke-width="16" fill="#f43f5e" fill-opacity="0.25"/>
-                    <text x="210" y="155" font-size="48" fill="#f43f5e" font-weight="700" text-anchor="middle">✕</text>
-                    <text x="210" y="195" font-size="20" fill="#fda4af" text-anchor="middle">3 × 3 = 9 lignes</text>
+                <svg width="380" height="240" viewBox="0 0 380 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="145" cy="120" r="95" stroke="#f43f5e" stroke-width="18" fill="#f43f5e" fill-opacity="0.25"/>
+                    <circle cx="235" cy="120" r="95" stroke="#f43f5e" stroke-width="18" fill="#f43f5e" fill-opacity="0.25"/>
+                    <text x="190" y="125" font-size="52" fill="#fda4af" font-weight="700" text-anchor="middle">✕</text>
+                    <text x="190" y="175" font-size="22" fill="#fda4af" text-anchor="middle">3 clients × 3 commandes = 9 lignes</text>
                 </svg>
             </div>
 
-            <div class="text-center text-rose-400 text-xl mb-8">
-                Chaque client est associé à chaque commande
-            </div>
-
-            <div class="bg-rose-900/20 border border-rose-400/30 rounded-3xl p-8 max-w-4xl mx-auto">
-                <code class="font-mono block bg-slate-950 p-6 rounded-2xl mb-6 text-rose-300">
-                    CROSS JOIN (sans condition ON)
+            <div class="max-w-lg mx-auto bg-rose-900/30 border border-rose-400/30 rounded-3xl p-10">
+                <code class="font-mono text-rose-300 text-lg block mb-6">
+                    SELECT * FROM clients CROSS JOIN commandes;
                 </code>
-                <p class="text-center text-rose-300 font-medium">Résultat : 9 lignes (toutes les combinaisons possibles)</p>
+                <p class="text-rose-300">Aucune condition → Chaque ligne de la première table est combinée avec chaque ligne de la seconde.</p>
             </div>
         </div>
+    </div>
+
+    <!-- Navigation fixe -->
+    <div class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-slate-900/90 backdrop-blur-md border border-slate-700 rounded-3xl px-8 py-5 flex items-center gap-8 z-50 shadow-2xl">
+        <button onclick="prevSlide()" 
+                class="nav-button flex items-center gap-3 bg-slate-800 hover:bg-slate-700 px-7 py-4 rounded-2xl font-medium text-lg">
+            ← Précédent
+        </button>
+
+        <div class="flex gap-4">
+            <button onclick="goToSlide(0)" id="dot-0" class="w-5 h-5 rounded-full bg-cyan-400"></button>
+            <button onclick="goToSlide(1)" id="dot-1" class="w-5 h-5 rounded-full bg-slate-600 hover:bg-slate-500"></button>
+            <button onclick="goToSlide(2)" id="dot-2" class="w-5 h-5 rounded-full bg-slate-600 hover:bg-slate-500"></button>
+            <button onclick="goToSlide(3)" id="dot-3" class="w-5 h-5 rounded-full bg-slate-600 hover:bg-slate-500"></button>
+            <button onclick="goToSlide(4)" id="dot-4" class="w-5 h-5 rounded-full bg-slate-600 hover:bg-slate-500"></button>
+        </div>
+
+        <button onclick="nextSlide()" 
+                class="nav-button flex items-center gap-3 bg-cyan-400 hover:bg-cyan-300 text-slate-950 px-8 py-4 rounded-2xl font-semibold text-lg">
+            Suivant →
+        </button>
     </div>
 
     <script>
@@ -334,12 +325,10 @@
         const totalSlides = 5;
 
         function showSlide(n) {
-            document.querySelectorAll('.slide').forEach(slide => {
-                slide.classList.remove('active');
-            });
+            document.querySelectorAll('.slide').forEach(slide => slide.classList.remove('active'));
             document.getElementById(`slide-${n}`).classList.add('active');
-            
-            // Mise à jour des dots
+
+            // Mise à jour des points de navigation
             for (let i = 0; i < totalSlides; i++) {
                 const dot = document.getElementById(`dot-${i}`);
                 if (dot) {
@@ -366,13 +355,12 @@
             showSlide(n);
         }
 
-        // Initialisation
+        // Initialisation + navigation clavier
         document.addEventListener('DOMContentLoaded', () => {
             showSlide(0);
-            
-            // Navigation au clavier
+
             document.addEventListener('keydown', (e) => {
-                if (e.key === "ArrowRight") nextSlide();
+                if (e.key === "ArrowRight" || e.key === " ") nextSlide();
                 if (e.key === "ArrowLeft") prevSlide();
             });
         });
