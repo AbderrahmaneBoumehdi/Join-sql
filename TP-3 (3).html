@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les Jointures SQL • Présentation Interactive</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap');
+        
+        :root {
+            --tw-color-primary: #00d4ff;
+        }
+        
+        body {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        .title-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .venn-container {
+            position: relative;
+            width: 420px;
+            height: 260px;
+            margin: 0 auto;
+        }
+        
+        .table-container {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .result-arrow {
+            animation: pulse 2s infinite;
+        }
+        
+        .slide-in {
+            animation: slideIn 0.6s ease forwards;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200">
+    <!-- HEADER / NAV -->
+    <nav class="bg-slate-900 border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-8 py-5 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 bg-cyan-400 rounded-2xl flex items-center justify-center text-slate-950 font-bold text-2xl">🔗</div>
+                <h1 class="title-font text-3xl font-semibold tracking-tighter">Jointures SQL</h1>
+            </div>
+            <div class="flex items-center gap-8 text-sm font-medium">
+                <a href="#intro" onclick="document.getElementById('intro').scrollIntoView({behavior: 'smooth'})" 
+                   class="hover:text-cyan-400 transition-colors">Introduction</a>
+                <a href="#inner" onclick="document.getElementById('inner').scrollIntoView({behavior: 'smooth'})" 
+                   class="hover:text-cyan-400 transition-colors">INNER JOIN</a>
+                <a href="#left" onclick="document.getElementById('left').scrollIntoView({behavior: 'smooth'})" 
+                   class="hover:text-cyan-400 transition-colors">LEFT OUTER JOIN</a>
+                <a href="#right" onclick="document.getElementById('right').scrollIntoView({behavior: 'smooth'})" 
+                   class="hover:text-cyan-400 transition-colors">RIGHT OUTER JOIN</a>
+                <a href="#cross" onclick="document.getElementById('cross').scrollIntoView({behavior: 'smooth'})" 
+                   class="hover:text-cyan-400 transition-colors">CROSS JOIN</a>
+                <a href="https://github.com" target="_blank" 
+                   class="bg-white text-slate-950 px-6 py-2.5 rounded-3xl font-semibold flex items-center gap-2 hover:bg-cyan-400 transition-all">
+                    <span>📥 Télécharger le repo GitHub.io</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO / INTRODUCTION -->
+    <section id="intro" class="max-w-7xl mx-auto px-8 pt-16 pb-20">
+        <div class="grid grid-cols-2 gap-16 items-center">
+            <div class="space-y-8">
+                <div class="inline-flex items-center gap-2 bg-slate-800 text-cyan-400 text-sm font-medium px-6 py-3 rounded-3xl">
+                    <div class="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+                    SQL • Bases de données relationnelles
+                </div>
+                <h1 class="title-font text-7xl leading-none font-semibold tracking-tighter">
+                    Maîtrisez les<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">JOINTURES SQL</span>
+                </h1>
+                <p class="text-2xl text-slate-400 max-w-lg">
+                    Une présentation complète et visuelle pour comprendre <strong>INNER</strong>, <strong>LEFT</strong>, <strong>RIGHT</strong> et <strong>CROSS JOIN</strong>.
+                </p>
+                <div class="flex items-center gap-6">
+                    <a href="#inner" 
+                       onclick="document.getElementById('inner').scrollIntoView({behavior: 'smooth'})"
+                       class="bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-semibold px-10 py-5 rounded-3xl text-lg inline-flex items-center gap-3 transition-all">
+                        Commencer la présentation
+                        <span class="text-3xl">→</span>
+                    </a>
+                    <div class="text-sm">
+                        <div class="font-medium">Créé pour GitHub Pages</div>
+                        <div class="text-slate-500">Copiez ce fichier → index.html</div>
+                    </div>
+                </div>
+                
+                <div class="pt-8 border-t border-slate-800 flex items-center gap-12 text-sm">
+                    <div>
+                        <div class="font-mono text-cyan-400">2 tables</div>
+                        <div class="text-slate-400">Clients &amp; Commandes</div>
+                    </div>
+                    <div>
+                        <div class="font-mono text-cyan-400">4 types de jointures</div>
+                        <div class="text-slate-400">Exemples + diagrammes cercles</div>
+                    </div>
+                    <div>
+                        <div class="font-mono text-cyan-400">100% visuel</div>
+                        <div class="text-slate-400">Tables + Venn + Résultats</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Introduction graphic -->
+            <div class="venn-container flex items-center justify-center bg-slate-900 rounded-3xl p-8 shadow-2xl shadow-cyan-500/10">
+                <svg width="420" height="260" viewBox="0 0 420 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Cercle gauche -->
+                    <circle cx="160" cy="130" r="95" stroke="#00d4ff" stroke-width="12" fill="#00d4ff" fill-opacity="0.15"/>
+                    <!-- Cercle droit -->
+                    <circle cx="260" cy="130" r="95" stroke="#00d4ff" stroke-width="12" fill="#00d4ff" fill-opacity="0.15"/>
+                    <!-- Intersection -->
+                    <circle cx="160" cy="130" r="95" stroke="#00d4ff" stroke-width="12" fill="#00d4ff" fill-opacity="0.25" clip-path="url(#intersect)"/>
+                    <defs>
+                        <clipPath id="intersect">
+                            <rect x="160" y="0" width="200" height="260"/>
+                        </clipPath>
+                    </defs>
+                    <text x="105" y="75" font-size="22" fill="#00d4ff" font-weight="600">Clients</text>
+                    <text x="265" y="75" font-size="22" fill="#00d4ff" font-weight="600">Commandes</text>
+                    <text x="200" y="145" font-size="28" fill="#ffffff" font-weight="700" text-anchor="middle">JOINTURE</text>
+                    <text x="200" y="175" font-size="15" fill="#a5f3fc" text-anchor="middle">Combiner des tables</text>
+                </svg>
+            </div>
+        </div>
+        
+        <div class="max-w-4xl mx-auto mt-20 text-center">
+            <p class="text-slate-400 text-lg leading-relaxed">
+                Une jointure SQL permet de <span class="text-cyan-400 font-medium">combiner les lignes de deux ou plusieurs tables</span> 
+                en fonction d’une condition commune (généralement une clé étrangère). 
+                Cette présentation interactive vous montre exactement ce qui se passe à chaque fois, 
+                avec des diagrammes de Venn en cercles et des tableaux SQL réels.
+            </p>
+        </div>
+    </section>
+
+    <!-- INNER JOIN -->
+    <section id="inner" class="max-w-7xl mx-auto px-8 py-20 border-t border-slate-800">
+        <div class="flex justify-between items-baseline mb-8">
+            <div>
+                <span class="px-4 py-1 bg-emerald-400 text-emerald-950 text-sm font-bold rounded-3xl">1</span>
+                <h2 class="title-font text-5xl font-semibold tracking-tighter mt-3">INNER JOIN</h2>
+                <p class="text-2xl text-emerald-400">Seules les correspondances communes</p>
+            </div>
+            <div class="text-right">
+                <code class="bg-slate-900 px-6 py-3 rounded-3xl font-mono text-emerald-400 text-sm">Retourne uniquement les lignes qui ont une correspondance dans les DEUX tables</code>
+            </div>
+        </div>
+        
+        <!-- Diagramme cercles -->
+        <div class="venn-container mb-12">
+            <svg width="420" height="260" viewBox="0 0 420 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="160" cy="130" r="95" stroke="#10b981" stroke-width="14" fill="#10b981" fill-opacity="0.1"/>
+                <circle cx="260" cy="130" r="95" stroke="#10b981" stroke-width="14" fill="#10b981" fill-opacity="0.1"/>
+                <!-- Intersection mise en évidence -->
+                <ellipse cx="210" cy="130" rx="75" ry="95" fill="#10b981" fill-opacity="0.6"/>
+                <text x="105" y="75" font-size="24" fill="#10b981" font-weight="700">Clients</text>
+                <text x="265" y="75" font-size="24" fill="#10b981" font-weight="700">Commandes</text>
+                <text x="210" y="130" font-size="32" fill="#052e16" font-weight="700" text-anchor="middle">✅</text>
+                <text x="210" y="165" font-size="18" fill="#052e16" text-anchor="middle">Résultat</text>
+            </svg>
+        </div>
+        
+        <!-- Exemple tables -->
+        <div class="grid grid-cols-12 gap-8">
+            <!-- Table gauche -->
+            <div class="col-span-5 table-container bg-slate-900 rounded-3xl p-8">
+                <div class="flex justify-between mb-6">
+                    <h3 class="font-semibold text-xl">Table <span class="text-emerald-400">Clients</span> (gauche)</h3>
+                    <span class="text-xs font-mono bg-emerald-300 text-emerald-950 px-3 rounded-2xl flex items-center">3 lignes</span>
+                </div>
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-700 text-emerald-400">
+                            <th class="pb-4 font-mono">id</th>
+                            <th class="pb-4 font-mono">nom</th>
+                        </tr>
+                    </thead>
+                    <tbody class="font-mono">
+                        <tr class="border-b border-slate-700"><td class="py-3">1</td><td>Alice</td></tr>
+                        <tr class="border-b border-slate-700"><td class="py-3">2</td><td>Bob</td></tr>
+                        <tr><td class="py-3">3</td><td>Charlie</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Table droite -->
+            <div class="col-span-5 table-container bg-slate-900 rounded-3xl p-8">
+                <div class="flex justify-between mb-6">
+                    <h3 class="font-semibold text-xl">Table <span class="text-emerald-400">Commandes</span> (droite)</h3>
+                    <span class="text-xs font-mono bg-emerald-300 text-emerald-950 px-3 rounded-2xl flex items-center">3 lignes</span>
+                </div>
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-700 text-emerald-400">
+                            <th class="pb-4 font-mono">id_client</th>
+                            <th class="pb-4 font-mono">produit</th>
+                        </tr>
+                    </thead>
+                    <tbody class="font-mono">
+                        <tr class="border-b border-slate-700"><td class="py-3">1</td><td>Ordinateur</td></tr>
+                        <tr class="border-b border-slate-700"><td class="py-3">2</td><td>Souris</td></tr>
+                        <tr><td class="py-3">4</td><td>Clavier</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Flèche centrale -->
+            <div class="col-span-2 flex items-center justify-center text-6xl text-emerald-400 result-arrow">→</div>
+            
+            <!-- Résultat -->
+            <div class="col-span-12 bg-gradient-to-r from-emerald-400/10 to-slate-900 rounded-3xl p-8 mt-8">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="font-mono bg-emerald-400 text-emerald-950 px-4 py-1 rounded-3xl text-sm">RÉSULTAT INNER JOIN</span>
+                    <code class="flex-1 font-mono text-xs bg-slate-950 px-4 py-3 rounded-2xl text-emerald-400 overflow-x-auto">
+                        SELECT c.nom, co.produit FROM clients c <span class="text-white">INNER JOIN</span> commandes co ON c.id = co.id_client
+                    </code>
+                </div>
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-emerald-400 text-emerald-400">
+                            <th class="pb-4 font-mono">nom</th>
+                            <th class="pb-4 font-mono">produit</th>
+                        </tr>
+                    </thead>
+                    <tbody class="font-mono">
+                        <tr class="border-b border-slate-700"><td class="py-4">Alice</td><td>Ordinateur</td></tr>
+                        <tr><td class="py-4">Bob</td><td>Souris</td></tr>
+                    </tbody>
+                </table>
+                <p class="text-xs text-emerald-400 mt-6 font-medium">→ Seules les lignes dont l’id existe dans les deux tables sont conservées (2 résultats).</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- LEFT OUTER JOIN -->
+    <section id="left" class="max-w-7xl mx-auto px-8 py-20 border-t border-slate-800 bg-slate-900">
+        <div class="flex justify-between items-baseline mb-8">
+            <div>
+                <span class="px-4 py-1 bg-blue-400 text-blue-950 text-sm font-bold rounded-3xl">2</span>
+                <h2 class="title-font text-5xl font-semibold tracking-tighter mt-3">LEFT OUTER JOIN</h2>
+                <p class="text-2xl text-blue-400">Tout à gauche + correspondances à droite</p>
+            </div>
+            <div class="text-right">
+                <code class="bg-slate-800 px-6 py-3 rounded-3xl font-mono text-blue-400 text-sm">Retourne TOUTES les lignes de la table de gauche + les correspondances de la droite (NULL sinon)</code>
+            </div>
+        </div>
+        
+        <!-- Diagramme cercles -->
+        <div class="venn-container mb-12">
+            <svg width="420" height="260" viewBox="0 0 420 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="160" cy="130" r="95" stroke="#3b82f6" stroke-width="14" fill="#3b82f6" fill-opacity="0.7"/>
+                <circle cx="260" cy="130" r="95" stroke="#3b82f6" stroke-width="14" fill="#3b82f6" fill-opacity="0.1"/>
+                <text x="105" y="75" font-size="24" fill="#3b82f6" font-weight="700">Clients</text>
+                <text x="265" y="75" font-size="24" fill="#3b82f6" font-weight="700">Commandes</text>
+                <text x="110" y="145" font-size="32" fill="#1e40af" font-weight="700" text-anchor="middle">✅</text>
+                <text x="210" y="200" font-size="18" fill="#1e40af" text-anchor="middle">Tout à gauche</text>
+            </svg>
+        </div>
+        
+        <!-- Exemple tables -->
+        <div class="grid grid-cols-12 gap-8">
+            <div class="col-span-5 table-container bg-slate-800 rounded-3xl p-8">
+                <div class="flex justify-between mb-6">
+                    <h3 class="font-semibold text-xl">Table <span class="text-blue-400">Clients</span> (gauche)</h3>
+                    <span class="text-xs font-mono bg-blue-300 text-blue-950 px-3 rounded-2xl flex items-center">3 lignes</span>
+                </div>
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-700 text-blue-400">
+                            <th class="pb-4 font-mono">id</th>
+                            <th class="pb-4 font-mono">nom</th>
+                        </tr>
+                    </thead>
+                    <tbody class="font-mono">
+                        <tr class="border-b border-slate-700"><td class="py-3">1</td><td>Alice</td></tr>
+                        <tr class="border-b border-slate-700"><td class="py-3">2</td><td>Bob</td></tr>
+                        <tr><td class="py-3">3</td><td>Charlie</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="col-span-5 table-container bg-slate-800 rounded-3xl p-8">
+                <div class="flex justify-between mb-6">
+                    <h3 class="font-semibold text-xl">Table <span class="text-blue-400">Commandes</span> (droite)</h3>
+                    <span class="text-xs font-mono bg-blue-300 text-blue-950 px-3 rounded-2xl flex items-center">3 lignes</span>
+                </div>
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-700 text-blue-400">
+                            <th class="pb-4 font-mono">id_client</th>
+                            <th class="pb-4 font-mono">produit</th>
+                        </tr>
+                    </thead>
+                    <tbody class="font-mono">
+                        <tr class="border-b border-slate-700"><td class="py-3">1</td><td>Ordinateur</td></tr>
+                        <tr class="border-b border-slate-700"><td class="py-3">2</td><td>Souris</td></tr>
+                        <tr><td class="py-3">4</td><td>Clavier</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="col-span-2 flex items-center justify-center text-6xl text-blue-400 result-arrow">→</div>
+            
+            <!-- Résultat -->
+            <div class="col-span-12 bg-gradient-to-r from-blue-400/10 to-slate-800 rounded-3xl p-8 mt-8">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="font-mono bg-blue-400 text-blue-950 px-4 py-1 rounded-3xl text-sm">RÉSULTAT LEFT OUTER JOIN</span>
+                    <code class="flex-1 font-mono text-xs bg-slate-950 px-4 py-3 rounded-2xl text-blue-400 overflow-x-auto">
+                        SELECT c.nom, co.produit FROM clients c <span class="text-white">LEFT OUTER JOIN</span> commandes co ON c.id = co.id_client
+                    </code>
+                </div>
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-blue-400 text-blue-400">
+                            <th class="pb-4 font-mono">nom</th>
+                            <th class="pb-4 font-mono">produit</th>
+                        </tr>
+                    </thead>
+                    <tbody class="font-mono">
+                        <tr class="border-b border-slate-700"><td class="py-4">Alice</td><td>Ordinateur</td></tr>
+                        <tr class="border-b border-slate-700"><td class="py-4">Bob</td><td>Souris</td></tr>
+                        <tr><td class="py-4">Charlie</td><td class="text-slate-500">NULL</td></tr>
+                    </tbody>
+                </table>
+                <p class="text-xs text-blue-400 mt-6 font-medium">→ Charlie n’a pas de commande → produit = NULL</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- RIGHT OUTER JOIN -->
+    <section id="right" class="max-w-7xl mx-auto px-8 py-20 border-t border-slate-800">
+        <div class="flex justify-between items-baseline mb-8">
+            <div>
+                <span class="px-4 py-1 bg-purple-400 text-purple-950 text-sm font-bold rounded-3xl">3</span>
+                <h2 class="title-font text-5xl font-semibold tracking-tighter mt-3">RIGHT OUTER JOIN</h2>
+                <p class="text-2xl text-purple-400">Tout à droite + correspondances à gauche</p>
+            </div>
+            <div class="text-right">
+                <code class="bg-slate-900 px-6 py-3 rounded-3xl font-mono text-purple-400 text-sm">Retourne TOUTES les lignes de la table de droite + les correspondances de la gauche (NULL sinon)</code>
+            </div>
+        </div>
+        
+        <!-- Diagramme cercles -->
+        <div class="venn-container mb-12">
+            <svg width="420" height="260" viewBox="0 0 420 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="160" cy="130" r="95" stroke="#a855f7" stroke-width="14" fill="#a855f7" fill-opacity="0.1"/>
+                <circle cx="260" cy="130" r="95" stroke="#a855f7" stroke-width="14" fill="#a855f7" fill-opacity="0.7"/>
+                <text x="105" y="75" font-size="24" fill="#a855f7" font-weight="700">Clients</text>
+                <text x="265" y="75" font-size="24" fill="#a855f7" font-weight="700">Commandes</text>
+                <text x="310" y="145" font-size="32" fill="#581c87" font-weight="700" text-anchor="middle">✅</text>
+                <text x="210" y="200" font-size="18" fill="#581c87" text-anchor="middle">Tout à droite</text>
+            </svg>
+        </div>
+        
+        <!-- Exemple tables -->
+        <div class="grid grid-cols-12 gap-8">
+            <div class="col-span-5 table-container bg-slate-900 rounded-3xl p-8">
+                <div class="flex justify-between mb-6">
+                    <h3 class="font-semibold text-xl">Table <span class="text-purple-400">Clients</span> (gauche)</h3>
+                    <span class="text-xs font-mono bg-purple-300 text-purple-950 px-3 rounded-2xl flex items-center">3 lignes</span>
+                </div>
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-700 text-purple-400">
+                            <th class="pb-4 font-mono">id</th>
+                            <th class="pb-4 font-mono">nom</th>
+                        </tr>
+                    </thead>
+                    <tbody class="font-mono">
+                        <tr class="border-b border-slate-700"><td class="py-3">1</td><td>Alice</td></tr>
+                        <tr class="border-b border-slate-700"><td class="py-3">2</td><td>Bob</td></tr>
+                        <tr><td class="py-3">3</td><td>Charlie</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="col-span-5 table-container bg-slate-900 rounded-3xl p-8">
+                <div class="flex justify-between mb-6">
+                    <h3 class="font-semibold text-xl">Table <span class="text-purple-400">Commandes</span> (droite)</h3>
+                    <span class="text-xs font-mono bg-purple-300 text-purple-950 px-3 rounded-2xl flex items-center">3 lignes</span>
+                </div>
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-700 text-purple-400">
+                            <th class="pb-4 font-mono">id_client</th>
+                            <th class="pb-4 font-mono">produit</th>
+                        </tr>
+                    </thead>
+                    <tbody class="font-mono">
+                        <tr class="border-b border-slate-700"><td class="py-3">1</td><td>Ordinateur</td></tr>
+                        <tr class="border-b border-slate-700"><td class="py-3">2</td><td>Souris</td></tr>
+                        <tr><td class="py-3">4</td><td>Clavier</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="col-span-2 flex items-center justify-center text-6xl text-purple-400 result-arrow">→</div>
+            
+            <!-- Résultat -->
+            <div class="col-span-12 bg-gradient-to-r from-purple-400/10 to-slate-900 rounded-3xl p-8 mt-8">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="font-mono bg-purple-400 text-purple-950 px-4 py-1 rounded-3xl text-sm">RÉSULTAT RIGHT OUTER JOIN</span>
+                    <code class="flex-1 font-mono text-xs bg-slate-950 px-4 py-3 rounded-2xl text-purple-400 overflow-x-auto">
+                        SELECT c.nom, co.produit FROM clients c <span class="text-white">RIGHT OUTER JOIN</span> commandes co ON c.id = co.id_client
+                    </code>
+                </div>
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-purple-400 text-purple-400">
+                            <th class="pb-4 font-mono">nom</th>
+                            <th class="pb-4 font-mono">produit</th>
+                        </tr>
+                    </thead>
+                    <tbody class="font-mono">
+                        <tr class="border-b border-slate-700"><td class="py-4">Alice</td><td>Ordinateur</td></tr>
+                        <tr class="border-b border-slate-700"><td class="py-4">Bob</td><td>Souris</td></tr>
+                        <tr><td class="py-4 text-slate-500">NULL</td><td>Clavier</td></tr>
+                    </tbody>
+                </table>
+                <p class="text-xs text-purple-400 mt-6 font-medium">→ Le clavier n’a pas de client correspondant → nom = NULL</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CROSS JOIN -->
+    <section id="cross" class="max-w-7xl mx-auto px-8 py-20 border-t border-slate-800 bg-slate-900">
+        <div class="flex justify-between items-baseline mb-8">
+            <div>
+                <span class="px-4 py-1 bg-rose-400 text-rose-950 text-sm font-bold rounded-3xl">4</span>
+                <h2 class="title-font text-5xl font-semibold tracking-tighter mt-3">CROSS JOIN</h2>
+                <p class="text-2xl text-rose-400">Produit cartésien (toutes les combinaisons)</p>
+            </div>
+            <div class="text-right">
+                <code class="bg-slate-800 px-6 py-3 rounded-3xl font-mono text-rose-400 text-sm">Aucune condition → chaque ligne de la gauche avec chaque ligne de la droite</code>
+            </div>
+        </div>
+        
+        <!-- Diagramme cercles -->
+        <div class="venn-container mb-12">
+            <svg width="420" height="260" viewBox="0 0 420 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="160" cy="130" r="95" stroke="#f43f5e" stroke-width="14" fill="#f43f5e" fill-opacity="0.2"/>
+                <circle cx="260" cy="130" r="95" stroke="#f43f5e" stroke-width="14" fill="#f43f5e" fill-opacity="0.2"/>
+                <!-- Toutes les zones sont incluses -->
+                <text x="105" y="75" font-size="24" fill="#f43f5e" font-weight="700">Clients</text>
+                <text x="265" y="75" font-size="24" fill="#f43f5e" font-weight="700">Commandes</text>
+                <text x="210" y="130" font-size="42" fill="#881337" font-weight="700" text-anchor="middle">✕</text>
+                <text x="210" y="175" font-size="18" fill="#881337" text-anchor="middle">3 × 3 = 9 lignes</text>
+            </svg>
+        </div>
+        
+        <!-- Exemple tables -->
+        <div class="grid grid-cols-12 gap-8">
+            <div class="col-span-5 table-container bg-slate-800 rounded-3xl p-8">
+                <div class="flex justify-between mb-6">
+                    <h3 class="font-semibold text-xl">Table <span class="text-rose-400">Clients</span> (gauche)</h3>
+                    <span class="text-xs font-mono bg-rose-300 text-rose-950 px-3 rounded-2xl flex items-center">3 lignes</span>
+                </div>
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-700 text-rose-400">
+                            <th class="pb-4 font-mono">id</th>
+                            <th class="pb-4 font-mono">nom</th>
+                        </tr>
+                    </thead>
+                    <tbody class="font-mono">
+                        <tr class="border-b border-slate-700"><td class="py-3">1</td><td>Alice</td></tr>
+                        <tr class="border-b border-slate-700"><td class="py-3">2</td><td>Bob</td></tr>
+                        <tr><td class="py-3">3</td><td>Charlie</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="col-span-5 table-container bg-slate-800 rounded-3xl p-8">
+                <div class="flex justify-between mb-6">
+                    <h3 class="font-semibold text-xl">Table <span class="text-rose-400">Commandes</span> (droite)</h3>
+                    <span class="text-xs font-mono bg-rose-300 text-rose-950 px-3 rounded-2xl flex items-center">3 lignes</span>
+                </div>
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-700 text-rose-400">
+                            <th class="pb-4 font-mono">id_client</th>
+                            <th class="pb-4 font-mono">produit</th>
+                        </tr>
+                    </thead>
+                    <tbody class="font-mono">
+                        <tr class="border-b border-slate-700"><td class="py-3">1</td><td>Ordinateur</td></tr>
+                        <tr class="border-b border-slate-700"><td class="py-3">2</td><td>Souris</td></tr>
+                        <tr><td class="py-3">4</td><td>Clavier</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="col-span-2 flex items-center justify-center text-6xl text-rose-400 result-arrow">✕</div>
+            
+            <!-- Résultat -->
+            <div class="col-span-12 bg-gradient-to-r from-rose-400/10 to-slate-800 rounded-3xl p-8 mt-8">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="font-mono bg-rose-400 text-rose-950 px-4 py-1 rounded-3xl text-sm">RÉSULTAT CROSS JOIN</span>
+                    <code class="flex-1 font-mono text-xs bg-slate-950 px-4 py-3 rounded-2xl text-rose-400 overflow-x-auto">
+                        SELECT c.nom, co.produit FROM clients c <span class="text-white">CROSS JOIN</span> commandes co
+                    </code>
+                </div>
+                <table class="w-full text-left border-collapse max-h-96 overflow-auto">
+                    <thead>
+                        <tr class="border-b border-rose-400 text-rose-400">
+                            <th class="pb-4 font-mono">nom</th>
+                            <th class="pb-4 font-mono">produit</th>
+                        </tr>
+                    </thead>
+                    <tbody class="font-mono text-sm">
+                        <tr><td class="py-2">Alice</td><td>Ordinateur</td></tr>
+                        <tr><td class="py-2">Alice</td><td>Souris</td></tr>
+                        <tr><td class="py-2">Alice</td><td>Clavier</td></tr>
+                        <tr><td class="py-2">Bob</td><td>Ordinateur</td></tr>
+                        <tr><td class="py-2">Bob</td><td>Souris</td></tr>
+                        <tr><td class="py-2">Bob</td><td>Clavier</td></tr>
+                        <tr><td class="py-2">Charlie</td><td>Ordinateur</td></tr>
+                        <tr><td class="py-2">Charlie</td><td>Souris</td></tr>
+                        <tr><td class="py-2">Charlie</td><td>Clavier</td></tr>
+                    </tbody>
+                </table>
+                <p class="text-xs text-rose-400 mt-6 font-medium">→ 3 clients × 3 commandes = 9 lignes. Aucune condition de jointure.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-950 border-t border-slate-800 py-12">
+        <div class="max-w-7xl mx-auto px-8 text-center">
+            <p class="text-slate-400 text-sm">Présentation prête pour GitHub Pages • Copiez tout ce code dans un fichier <strong>index.html</strong> et déployez sur <code class="bg-slate-900 px-2 py-0.5 rounded">gh-pages</code></p>
+            <p class="mt-3 text-xs text-slate-500">Créé avec ❤️ pour une compréhension visuelle parfaite des jointures SQL</p>
+        </div>
+    </footer>
+
+    <script>
+        // Tailwind script already loaded
+        function initializeTailwind() {
+            // Tailwind already initialized via CDN
+            console.log('%c✅ Présentation des jointures SQL chargée avec succès !', 'color:#00d4ff; font-family:monospace; font-size:13px');
+        }
+        window.onload = initializeTailwind;
+    </script>
+</body>
+</html>
