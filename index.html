@@ -3,311 +3,435 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Les Jointures SQL</title>
+    <title>Exercices 1 à 12 - Niveau OFPPT</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap');
-
-        :root {
-            --red: #ef4444;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: #0f172a;
-            color: #f1f5f9;
-            overflow: hidden;
-            height: 100vh;
-        }
-
-        #slideshow {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-        }
-
-        .slide {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #0f172a 0%, #1e2937 100%);
+            font-family: Arial, sans-serif;
+            margin: 0;
             padding: 20px;
+            background: #f4f4f4;
+            color: #333;
         }
-
-        .slide.active {
-            display: flex;
-            animation: fadeIn 0.6s ease forwards;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .slide-content {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        .slide img {
-            max-width: 100%;
-            max-height: 94vh;
-            border-radius: 16px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7);
-            border: 10px solid #1e2937;
-        }
-
-        /* Navigation en haut à droite */
-        .navigation {
-            position: fixed;
-            top: 25px;
-            right: 30px;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(16px);
-            border-radius: 50px;
-            padding: 10px 14px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-        }
-
-        .nav-btn {
-            background: transparent;
-            border: 2.5px solid #64748b;
-            color: #f1f5f9;
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            font-size: 1.7rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .nav-btn:hover {
-            background: var(--red);
-            border-color: var(--red);
-            transform: scale(1.1);
-        }
-
-        .slide-counter {
-            color: #94a3b8;
-            font-size: 1.25rem;
-            font-weight: 600;
-            padding: 0 12px;
-            min-width: 80px;
+        h1 {
             text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        section {
+            background: white;
+            margin: 25px auto;
+            padding: 25px;
+            max-width: 1000px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #2980b9;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        input, select, button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 8px 0;
+        }
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        button:hover { background: #2980b9; }
+
+        /* Ex1 */
+        #inputTexte { width: 100%; padding: 12px; font-size: 18px; }
+        #affichage { font-size: 24px; min-height: 50px; margin-top: 15px; }
+
+        /* Ex2 */
+        #imageToggle { width: 500px; cursor: pointer; border-radius: 10px; }
+
+        /* Ex9 */
+        #curseur {
+            position: absolute;
+            width: 35px;
+            height: 35px;
+            background: rgba(52, 152, 219, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: all 0.08s ease;
         }
 
-        /* Barre de progression en haut */
-        .progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: #334155;
-            z-index: 999;
+        /* Ex10 */
+        #zoneJeu {
+            position: relative;
+            height: 420px;
+            border: 3px dashed #3498db;
+            background: #ecf0f1;
+            margin: 15px 0;
+        }
+        .cible {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
         }
 
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(to right, #ef4444, #22d3ee);
-            transition: width 0.4s ease;
+        /* Ex11 */
+        .accordion-header {
+            background: #3498db;
+            color: white;
+            padding: 15px;
+            cursor: pointer;
+            margin: 8px 0;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        .accordion-content {
+            display: none;
+            padding: 15px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 6px 6px;
         }
 
-        .slide-title {
-            position: fixed;
-            top: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(15, 23, 42, 0.9);
-            color: #ef4444;
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2.4rem;
-            font-weight: 600;
-            padding: 10px 32px;
-            border-radius: 50px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-            z-index: 10;
-            white-space: nowrap;
+        /* Ex12 */
+        .galerie {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
         }
+        .galerie img {
+            width: 190px;
+            height: 190px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 3px solid #ddd;
+        }
+        .error { color: red; }
+        .success { color: green; }
     </style>
 </head>
 <body>
 
-    <div id="slideshow">
+    <h1>Exercices JavaScript 1 à 12 - Niveau OFPPT</h1>
 
-        <!-- Diapo 1 -->
-        <div class="slide active" id="slide-1">
-            <div class="slide-content">
-                <img id="img-1" src="jointure-1.png" alt="Les Jointures">
-            </div>
+    <!-- Exercice 1 -->
+    <section>
+        <h2>Exercice 1 : Texte en temps réel</h2>
+        <input type="text" id="inputTexte" placeholder="Tapez quelque chose...">
+        <p id="affichage">Votre texte apparaîtra ici...</p>
+    </section>
+
+    <!-- Exercice 2 -->
+    <section>
+        <h2>Exercice 2 : Changer d'image au clic</h2>
+        <img id="imageToggle" src="https://picsum.photos/id/1015/600/400" alt="Image">
+        <p>Cliquez sur l'image pour la changer</p>
+    </section>
+
+    <!-- Exercice 3 -->
+    <section>
+        <h2>Exercice 3 : Changer la couleur de fond</h2>
+        <select id="couleurs">
+            <option value="#ffffff">Blanc</option>
+            <option value="#ffdddd">Rose</option>
+            <option value="#ddffdd">Vert</option>
+            <option value="#ddddff">Bleu</option>
+            <option value="#ffffcc">Jaune</option>
+            <option value="#ffccaa">Orange</option>
+        </select>
+    </section>
+
+    <!-- Exercice 4 -->
+    <section>
+        <h2>Exercice 4 : Mode Nuit / Mode Jour</h2>
+        <button id="btnMode">Activer le Mode Nuit</button>
+    </section>
+
+    <!-- Exercice 5 -->
+    <section>
+        <h2>Exercice 5 : Liste de tâches (barrer)</h2>
+        <ul id="listeTaches">
+            <li>Tâche 1 <button class="terminer">Terminer</button></li>
+            <li>Tâche 2 <button class="terminer">Terminer</button></li>
+            <li>Tâche 3 <button class="terminer">Terminer</button></li>
+            <li>Tâche 4 <button class="terminer">Terminer</button></li>
+        </ul>
+    </section>
+
+    <!-- Exercice 6 -->
+    <section>
+        <h2>Exercice 6 : Galerie avec fenêtre modale</h2>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <img class="miniature" src="https://picsum.photos/id/1015/300/300" data-full="https://picsum.photos/id/1015/1200/800" style="width:140px; cursor:pointer; border-radius:8px;">
+            <img class="miniature" src="https://picsum.photos/id/201/300/300" data-full="https://picsum.photos/id/201/1200/800" style="width:140px; cursor:pointer; border-radius:8px;">
+            <img class="miniature" src="https://picsum.photos/id/237/300/300" data-full="https://picsum.photos/id/237/1200/800" style="width:140px; cursor:pointer; border-radius:8px;">
+            <img class="miniature" src="https://picsum.photos/id/870/300/300" data-full="https://picsum.photos/id/870/1200/800" style="width:140px; cursor:pointer; border-radius:8px;">
         </div>
+    </section>
 
-        <!-- Diapo 2 -->
-        <div class="slide" id="slide-2">
-            <div class="slide-content">
-                <img id="img-2" src="jointure-2.png" alt="Types de Jointures">
-            </div>
+    <!-- Exercice 7 -->
+    <section>
+        <h2>Exercice 7 : Chronomètre</h2>
+        <div id="temps" style="font-size:60px; font-weight:bold; text-align:center; color:#e74c3c;">00:00.00</div>
+        <div style="text-align:center;">
+            <button id="start">Démarrer</button>
+            <button id="pause">Pause</button>
+            <button id="reset">Réinitialiser</button>
         </div>
+    </section>
 
-        <!-- Diapo 3 -->
-        <div class="slide" id="slide-3">
-            <div class="slide-content">
-                <img id="img-3" src="jointure-3.png" alt="Qu'est-ce qu'une jointure">
-            </div>
+    <!-- Exercice 8 -->
+    <section>
+        <h2>Exercice 8 : Formulaire d'inscription avec validation (blur)</h2>
+        <label>Nom complet :</label><br>
+        <input type="text" id="nom" placeholder="Votre nom"><br>
+        <span id="errNom" class="error"></span><br><br>
+
+        <label>Email :</label><br>
+        <input type="email" id="email" placeholder="exemple@email.com"><br>
+        <span id="errEmail" class="error"></span><br><br>
+
+        <label>Mot de passe :</label><br>
+        <input type="password" id="password" placeholder="Min 6 caractères"><br>
+        <span id="errPassword" class="error"></span>
+    </section>
+
+    <!-- Exercice 9 -->
+    <section>
+        <h2>Exercice 9 : Élément qui suit la souris avec délai</h2>
+        <p>Déplacez votre souris dans cette section</p>
+        <div id="curseur"></div>
+    </section>
+
+    <!-- Exercice 10 -->
+    <section>
+        <h2>Exercice 10 : Jeu de cible (cliquez sur la cible)</h2>
+        <p>Score : <strong id="score">0</strong></p>
+        <div id="zoneJeu"></div>
+        <button id="rejouer">Nouvelle partie</button>
+    </section>
+
+    <!-- Exercice 11 -->
+    <section>
+        <h2>Exercice 11 : Accordéon</h2>
+        <div class="accordion">
+            <div class="accordion-header" data-index="0">Qu'est-ce que JavaScript ?</div>
+            <div class="accordion-content">JavaScript est un langage de script côté client qui permet de rendre les pages web interactives.</div>
         </div>
-
-        <!-- Diapo 4 -->
-        <div class="slide" id="slide-4">
-            <div class="slide-content">
-                <img id="img-4" src="jointure-4.png" alt="CROSS JOIN">
-            </div>
+        <div class="accordion">
+            <div class="accordion-header" data-index="1">Avantages</div>
+            <div class="accordion-content">Validation de formulaires, animations, jeux, mise à jour du contenu sans recharger la page...</div>
         </div>
-
-        <!-- Diapo 5 -->
-        <div class="slide" id="slide-5">
-            <div class="slide-content">
-                <img id="img-5" src="jointure-5.png" alt="INNER JOIN">
-            </div>
+        <div class="accordion">
+            <div class="accordion-header" data-index="2">Événements</div>
+            <div class="accordion-content">click, blur, input, mousemove, etc. sont des événements très utilisés en JavaScript.</div>
         </div>
+    </section>
 
-        <!-- Diapo 6 -->
-        <div class="slide" id="slide-6">
-            <div class="slide-content">
-                <img id="img-6" src="jointure-6.png" alt="LEFT JOIN">
-            </div>
-        </div>
+    <!-- Exercice 12 -->
+    <section>
+        <h2>Exercice 12 : Ajouter des images via URL</h2>
+        <input type="text" id="urlImage" placeholder="https://exemple.com/image.jpg" style="width:75%;">
+        <button id="btnAjouter">Ajouter</button>
+        <span id="msgUrl" class="error"></span>
+        <div class="galerie" id="galerieImages"></div>
+    </section>
 
-        <!-- Diapo 7 -->
-        <div class="slide" id="slide-7">
-            <div class="slide-content">
-                <img id="img-7" src="jointure-7.png" alt="RIGHT JOIN">
-            </div>
-        </div>
-
-        <!-- Diapo 8 -->
-        <div class="slide" id="slide-8">
-            <div class="slide-content">
-                <img id="img-8" src="jointure-8.png" alt="Exemple INNER JOIN">
-            </div>
-        </div>
-
-        <!-- Diapo 9 -->
-        <div class="slide" id="slide-9">
-            <div class="slide-content">
-                <img id="img-9" src="jointure-9.png" alt="Exemple RIGHT JOIN">
-            </div>
-        </div>
-
-        <!-- Diapo 10 -->
-        <div class="slide" id="slide-10">
-            <div class="slide-content">
-                <img id="img-10" src="jointure-10.png" alt="Exemple LEFT JOIN">
-            </div>
-        </div>
-
-        <!-- Diapo 11 -->
-        <div class="slide" id="slide-11">
-            <div class="slide-content">
-                <img id="img-11" src="jointure-11.png" alt="Exemple CROSS JOIN">
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Navigation en haut à droite -->
-    <div class="navigation">
-        <button onclick="prevSlide()" class="nav-btn" title="Précédent">←</button>
-        <div class="slide-counter" id="counter">1 / 11</div>
-        <button onclick="nextSlide()" class="nav-btn" title="Suivant">→</button>
-    </div>
-
-    <!-- Barre de progression en haut -->
-    <div class="progress">
-        <div id="progress-bar" class="progress-bar" style="width: 9.09%;"></div>
+    <!-- Modal pour Exercice 6 -->
+    <div id="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); justify-content:center; align-items:center; z-index:1000;">
+        <span id="closeModal" style="position:absolute; top:20px; right:40px; font-size:50px; color:white; cursor:pointer;">&times;</span>
+        <img id="imgModale" style="max-width:90%; max-height:90%; border-radius:12px;" src="" alt="">
     </div>
 
     <script>
-        let currentSlide = 0;
-        const totalSlides = 11;
-        const slides = document.querySelectorAll('.slide');
-
-        function updateUI() {
-            document.getElementById('counter').innerHTML = 
-                `<strong>${currentSlide + 1}</strong> / ${totalSlides}`;
-            
-            const progress = ((currentSlide + 1) / totalSlides) * 100;
-            document.getElementById('progress-bar').style.width = `${progress}%`;
-        }
-
-        function showSlide(n) {
-            slides.forEach(slide => slide.classList.remove('active'));
-            slides[n].classList.add('active');
-            currentSlide = n;
-            updateUI();
-        }
-
-        function nextSlide() {
-            let next = currentSlide + 1;
-            if (next >= totalSlides) next = 0;
-            showSlide(next);
-        }
-
-        function prevSlide() {
-            let prev = currentSlide - 1;
-            if (prev < 0) prev = totalSlides - 1;
-            showSlide(prev);
-        }
-
-        // Navigation clavier
-        document.addEventListener('keydown', (e) => {
-            if (e.key === "ArrowRight") nextSlide();
-            if (e.key === "ArrowLeft") prevSlide();
+        // Ex1
+        document.getElementById('inputTexte').addEventListener('input', function() {
+            document.getElementById('affichage').textContent = this.value || "Votre texte apparaîtra ici...";
         });
 
-        // Swipe sur mobile
-        let touchStartX = 0;
-        document.addEventListener('touchstart', e => {
-            touchStartX = e.changedTouches[0].screenX;
-        });
-        document.addEventListener('touchend', e => {
-            const touchEndX = e.changedTouches[0].screenX;
-            if (touchEndX < touchStartX - 70) nextSlide();
-            if (touchEndX > touchStartX + 70) prevSlide();
+        // Ex2
+        let estImage1 = true;
+        document.getElementById('imageToggle').addEventListener('click', function() {
+            estImage1 = !estImage1;
+            this.src = estImage1 ? "https://picsum.photos/id/1015/600/400" : "https://picsum.photos/id/201/600/400";
         });
 
-        // Clic sur l'image pour passer à la diapo suivante
-        document.addEventListener('click', (e) => {
-            if (e.target.tagName === 'IMG') {
-                nextSlide();
+        // Ex3
+        document.getElementById('couleurs').addEventListener('change', function() {
+            document.body.style.backgroundColor = this.value;
+        });
+
+        // Ex4
+        let modeNuit = false;
+        const btnMode = document.getElementById('btnMode');
+        btnMode.addEventListener('click', () => {
+            modeNuit = !modeNuit;
+            if (modeNuit) {
+                document.body.style.backgroundColor = "#121212";
+                document.body.style.color = "#fff";
+                btnMode.textContent = "Mode Jour";
+            } else {
+                document.body.style.backgroundColor = "#f4f4f4";
+                document.body.style.color = "#333";
+                btnMode.textContent = "Activer le Mode Nuit";
             }
         });
 
-        // Initialisation
-        window.onload = () => {
-            updateUI();
-            console.log('%c✅ Présentation Les Jointures chargée avec succès !', 'color:#ef4444; font-size:16px;');
-        };
+        // Ex5
+        document.querySelectorAll('.terminer').forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.parentElement.style.textDecoration = 'line-through';
+                btn.parentElement.style.color = '#777';
+            });
+        });
+
+        // Ex6 - Modal
+        const modal = document.getElementById('modal');
+        const imgModale = document.getElementById('imgModale');
+        const closeModal = document.getElementById('closeModal');
+
+        document.querySelectorAll('.miniature').forEach(img => {
+            img.addEventListener('click', () => {
+                imgModale.src = img.dataset.full;
+                modal.style.display = 'flex';
+            });
+        });
+
+        closeModal.addEventListener('click', () => modal.style.display = 'none');
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.style.display = 'none';
+        });
+
+        // Ex7 - Chronomètre
+        let temps = 0, intervalle = null, enCours = false;
+        const affTemps = document.getElementById('temps');
+
+        function formater(t) {
+            const m = Math.floor(t / 6000);
+            const s = Math.floor((t % 6000)/100);
+            const c = t % 100;
+            return `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}.${c.toString().padStart(2,'0')}`;
+        }
+
+        document.getElementById('start').addEventListener('click', () => {
+            if (!enCours) {
+                intervalle = setInterval(() => { temps++; affTemps.textContent = formater(temps); }, 10);
+                enCours = true;
+            }
+        });
+
+        document.getElementById('pause').addEventListener('click', () => {
+            clearInterval(intervalle);
+            enCours = false;
+        });
+
+        document.getElementById('reset').addEventListener('click', () => {
+            clearInterval(intervalle);
+            temps = 0;
+            enCours = false;
+            affTemps.textContent = "00:00.00";
+        });
+
+        // Ex8 - Validation blur
+        function valider(champ, idErr, msg, condition) {
+            champ.addEventListener('blur', () => {
+                document.getElementById(idErr).textContent = condition(champ.value) ? '' : msg;
+            });
+        }
+        valider(document.getElementById('nom'), 'errNom', 'Nom obligatoire (min 3 caractères)', v => v.trim().length >= 3);
+        valider(document.getElementById('email'), 'errEmail', 'Email invalide', v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v));
+        valider(document.getElementById('password'), 'errPassword', 'Mot de passe min 6 caractères', v => v.length >= 6);
+
+        // Ex9 - Curseur qui suit la souris
+        const curseur = document.getElementById('curseur');
+        document.addEventListener('mousemove', (e) => {
+            curseur.style.left = (e.pageX - 17) + 'px';
+            curseur.style.top = (e.pageY - 17) + 'px';
+        });
+
+        // Ex10 - Jeu de cible
+        let score = 0;
+        const zone = document.getElementById('zoneJeu');
+        const scoreEl = document.getElementById('score');
+
+        function nouvelleCible() {
+            const old = document.querySelector('.cible');
+            if (old) old.remove();
+
+            const cible = document.createElement('div');
+            cible.className = 'cible';
+            cible.textContent = '🎯';
+
+            const maxX = zone.offsetWidth - 70;
+            const maxY = zone.offsetHeight - 70;
+            cible.style.left = Math.random() * maxX + 'px';
+            cible.style.top = Math.random() * maxY + 'px';
+
+            cible.addEventListener('click', () => {
+                score++;
+                scoreEl.textContent = score;
+                nouvelleCible();
+            });
+
+            zone.appendChild(cible);
+        }
+
+        document.getElementById('rejouer').addEventListener('click', () => {
+            score = 0;
+            scoreEl.textContent = '0';
+            nouvelleCible();
+        });
+        nouvelleCible();
+
+        // Ex11 - Accordéon
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const content = header.nextElementSibling;
+                const isVisible = content.style.display === 'block';
+                
+                document.querySelectorAll('.accordion-content').forEach(c => c.style.display = 'none');
+                
+                if (!isVisible) content.style.display = 'block';
+            });
+        });
+
+        // Ex12 - Galerie URL
+        const btnAjouter = document.getElementById('btnAjouter');
+        const urlInput = document.getElementById('urlImage');
+        const galerie = document.getElementById('galerieImages');
+        const msgUrl = document.getElementById('msgUrl');
+
+        btnAjouter.addEventListener('click', () => {
+            const url = urlInput.value.trim();
+            if (!url) {
+                msgUrl.textContent = "Veuillez entrer une URL";
+                return;
+            }
+            if (!url.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
+                msgUrl.textContent = "URL d'image invalide (.jpg, .png, .gif...)";
+                return;
+            }
+
+            msgUrl.textContent = "";
+            const img = document.createElement('img');
+            img.src = url;
+            img.onerror = () => { msgUrl.textContent = "Impossible de charger l'image"; };
+            galerie.appendChild(img);
+            urlInput.value = '';
+        });
     </script>
 </body>
 </html>
