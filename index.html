@@ -3,323 +3,268 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Les Jointures SQL - Présentation</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Les Jointures SQL</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap');
-        
-        body {
-            font-family: 'Inter', system_ui, sans-serif;
-            overflow: hidden;
-            background: #0a1428;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap');
+
+        :root {
+            --red: #ef4444;
         }
-        .title-font {
-            font-family: 'Space Grotesk', sans-serif;
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #0f172a;
+            color: #f1f5f9;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        #slideshow {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
         }
 
         .slide {
-            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             display: none;
             align-items: center;
             justify-content: center;
-            padding: 70px 40px 150px 40px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e2937 100%);
+            padding: 20px;
         }
+
         .slide.active {
             display: flex;
+            animation: fadeIn 0.6s ease forwards;
         }
 
-        .content {
-            max-width: 1100px;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-content {
             width: 100%;
-        }
-
-        .venn-container {
-            width: 340px;
-            height: 210px;
-            margin: 0 auto;
-        }
-
-        .result-box {
-            background: #1e2937;
-            border-radius: 16px;
-            padding: 24px;
-            border: 1px solid #334155;
-        }
-
-        .nav-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #1e2937;
-            border-top: 1px solid #334155;
-            padding: 16px 40px;
+            height: 100%;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
+            position: relative;
+        }
+
+        .slide img {
+            max-width: 100%;
+            max-height: 94vh;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7);
+            border: 10px solid #1e2937;
+        }
+
+        /* Navigation en haut à droite */
+        .navigation {
+            position: fixed;
+            top: 25px;
+            right: 30px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(16px);
+            border-radius: 50px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             z-index: 1000;
         }
 
         .nav-btn {
-            padding: 10px 28px;
-            border-radius: 9999px;
-            font-weight: 500;
-            font-size: 15px;
-            min-width: 130px;
+            background: transparent;
+            border: 2.5px solid #64748b;
+            color: #f1f5f9;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            font-size: 1.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .nav-btn-prev {
-            background: #334155;
-            color: #e2e8f0;
+        .nav-btn:hover {
+            background: var(--red);
+            border-color: var(--red);
+            transform: scale(1.1);
         }
-        .nav-btn-next {
-            background: #0ea5e9;
-            color: white;
+
+        .slide-counter {
+            color: #94a3b8;
+            font-size: 1.25rem;
             font-weight: 600;
+            padding: 0 12px;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        /* Barre de progression en haut */
+        .progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: #334155;
+            z-index: 999;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, #ef4444, #22d3ee);
+            transition: width 0.4s ease;
+        }
+
+        .slide-title {
+            position: fixed;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.9);
+            color: #ef4444;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.4rem;
+            font-weight: 600;
+            padding: 10px 32px;
+            border-radius: 50px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            z-index: 10;
+            white-space: nowrap;
         }
     </style>
 </head>
 <body>
 
-    <!-- Slide 0 : Introduction -->
-    <div id="slide-0" class="slide active">
-        <div class="content text-center">
-            <h1 class="title-font text-6xl font-bold tracking-tighter text-white mb-6">
-                Les <span class="text-cyan-400">JOINTURES SQL</span>
-            </h1>
-            <p class="text-2xl text-slate-300">INNER • LEFT • RIGHT • CROSS JOIN</p>
+    <div id="slideshow">
+
+        <!-- Diapo 1 -->
+        <div class="slide active" id="slide-1">
+            <div class="slide-content">
+                <img id="img-1" src="img1.png" alt="Les Jointures">
+            </div>
         </div>
+
+        <!-- Diapo 2 -->
+        <div class="slide" id="slide-2">
+            <div class="slide-content">
+                <img id="img-2" src="img2.png" alt="Types de Jointures">
+            </div>
+        </div>
+
+        <!-- Diapo 3 -->
+        <div class="slide" id="slide-3">
+            <div class="slide-content">
+                <img id="img-3" src="img3.png" alt="Qu'est-ce qu'une jointure">
+            </div>
+        </div>
+
+        <!-- Diapo 4 -->
+        <div class="slide" id="slide-4">
+            <div class="slide-content">
+                <img id="img-4" src="img4.png" alt="CROSS JOIN">
+            </div>
+        </div>
+
+        <!-- Diapo 5 -->
+        <div class="slide" id="slide-5">
+            <div class="slide-content">
+                <img id="img-5" src="img5.png" alt="INNER JOIN">
+            </div>
+        </div>
+
+        <!-- Diapo 6 -->
+        <div class="slide" id="slide-6">
+            <div class="slide-content">
+                <img id="img-6" src="img6.png" alt="LEFT JOIN">
+            </div>
+        </div>
+
+        <!-- Diapo 7 -->
+        <div class="slide" id="slide-7">
+            <div class="slide-content">
+                <img id="img-7" src="img7.png" alt="RIGHT JOIN">
+            </div>
+        </div>
+
+        <!-- Diapo 8 -->
+        <div class="slide" id="slide-8">
+            <div class="slide-content">
+                <img id="img-8" src="img8.png" alt="Exemple INNER JOIN">
+            </div>
+        </div>
+
+        <!-- Diapo 9 -->
+        <div class="slide" id="slide-9">
+            <div class="slide-content">
+                <img id="img-9" src="img9.png" alt="Exemple RIGHT JOIN">
+            </div>
+        </div>
+
+        <!-- Diapo 10 -->
+        <div class="slide" id="slide-10">
+            <div class="slide-content">
+                <img id="img-10" src="img10.png" alt="Exemple LEFT JOIN">
+            </div>
+        </div>
+
+        <!-- Diapo 11 -->
+        <div class="slide" id="slide-11">
+            <div class="slide-content">
+                <img id="img-11" src="img11.png" alt="Exemple CROSS JOIN">
+            </div>
+        </div>
+
     </div>
 
-    <!-- Slide 1 : INNER JOIN -->
-    <div id="slide-1" class="slide">
-        <div class="content">
-            <div class="text-center mb-10">
-                <h2 class="title-font text-5xl font-bold text-white">INNER JOIN</h2>
-                <p class="text-emerald-300 text-xl mt-2">Seules les correspondances communes aux deux tables</p>
-            </div>
-
-            <div class="grid grid-cols-12 gap-12 items-center">
-                <!-- Venn amélioré -->
-                <div class="col-span-5">
-                    <div class="venn-container">
-                        <svg width="340" height="210" viewBox="0 0 340 210" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="130" cy="105" r="88" stroke="#22d3ee" stroke-width="18" fill="#22d3ee" fill-opacity="0.25"/>
-                            <circle cx="210" cy="105" r="88" stroke="#22d3ee" stroke-width="18" fill="#22d3ee" fill-opacity="0.25"/>
-                            <text x="95" y="95" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">Clients</text>
-                            <text x="245" y="95" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">Commandes</text>
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="col-span-7">
-                    <div class="grid grid-cols-2 gap-8">
-                        <div>
-                            <h3 class="text-white font-bold mb-4 text-lg">Clients (gauche)</h3>
-                            <table class="w-full text-white text-sm">
-                                <tr class="border-b border-slate-600"><th class="text-left py-2">id</th><th class="text-left py-2">nom</th></tr>
-                                <tr class="border-b border-slate-600"><td class="py-2">1</td><td>Alice</td></tr>
-                                <tr class="border-b border-slate-600"><td class="py-2">2</td><td>Bob</td></tr>
-                                <tr><td class="py-2">3</td><td>Charlie</td></tr>
-                            </table>
-                        </div>
-                        <div>
-                            <h3 class="text-white font-bold mb-4 text-lg">Commandes (droite)</h3>
-                            <table class="w-full text-white text-sm">
-                                <tr class="border-b border-slate-600"><th class="text-left py-2">id_client</th><th class="text-left py-2">produit</th></tr>
-                                <tr class="border-b border-slate-600"><td class="py-2">1</td><td>Ordinateur</td></tr>
-                                <tr class="border-b border-slate-600"><td class="py-2">2</td><td>Souris</td></tr>
-                                <tr><td class="py-2">4</td><td>Clavier</td></tr>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="result-box mt-10">
-                        <p class="text-emerald-400 font-mono text-sm mb-4">RÉSULTAT INNER JOIN</p>
-                        <table class="w-full text-white text-sm">
-                            <tr class="border-b border-slate-600"><th class="text-left">nom</th><th class="text-left">produit</th></tr>
-                            <tr><td>Alice</td><td>Ordinateur</td></tr>
-                            <tr><td>Bob</td><td>Souris</td></tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <!-- Navigation en haut à droite -->
+    <div class="navigation">
+        <button onclick="prevSlide()" class="nav-btn" title="Précédent">←</button>
+        <div class="slide-counter" id="counter">1 / 11</div>
+        <button onclick="nextSlide()" class="nav-btn" title="Suivant">→</button>
     </div>
 
-    <!-- Slide 2 : LEFT JOIN -->
-    <div id="slide-2" class="slide">
-        <div class="content">
-            <div class="text-center mb-10">
-                <h2 class="title-font text-5xl font-bold text-white">LEFT OUTER JOIN</h2>
-                <p class="text-blue-300 text-xl mt-2">Toutes les lignes de la table de gauche</p>
-            </div>
-
-            <div class="grid grid-cols-12 gap-12 items-center">
-                <div class="col-span-5">
-                    <div class="venn-container">
-                        <svg width="340" height="210" viewBox="0 0 340 210" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="130" cy="105" r="88" stroke="#60a5fa" stroke-width="18" fill="#60a5fa" fill-opacity="0.7"/>
-                            <circle cx="210" cy="105" r="88" stroke="#60a5fa" stroke-width="18" fill="#60a5fa" fill-opacity="0.15"/>
-                            <text x="95" y="95" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">Clients</text>
-                            <text x="245" y="95" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">Commandes</text>
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="col-span-7">
-                    <div class="grid grid-cols-2 gap-8">
-                        <div>
-                            <h3 class="text-white font-bold mb-4 text-lg">Clients (gauche)</h3>
-                            <table class="w-full text-white text-sm">
-                                <tr class="border-b border-slate-600"><th class="text-left py-2">id</th><th class="text-left py-2">nom</th></tr>
-                                <tr><td>1</td><td>Alice</td></tr>
-                                <tr><td>2</td><td>Bob</td></tr>
-                                <tr><td>3</td><td>Charlie</td></tr>
-                            </table>
-                        </div>
-                        <div>
-                            <h3 class="text-white font-bold mb-4 text-lg">Commandes (droite)</h3>
-                            <table class="w-full text-white text-sm">
-                                <tr class="border-b border-slate-600"><th class="text-left py-2">id_client</th><th class="text-left py-2">produit</th></tr>
-                                <tr><td>1</td><td>Ordinateur</td></tr>
-                                <tr><td>2</td><td>Souris</td></tr>
-                                <tr><td>4</td><td>Clavier</td></tr>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="result-box mt-10">
-                        <p class="text-blue-400 font-mono text-sm mb-4">RÉSULTAT LEFT OUTER JOIN</p>
-                        <table class="w-full text-white text-sm">
-                            <tr class="border-b border-slate-600"><th class="text-left">nom</th><th class="text-left">produit</th></tr>
-                            <tr><td>Alice</td><td>Ordinateur</td></tr>
-                            <tr><td>Bob</td><td>Souris</td></tr>
-                            <tr><td>Charlie</td><td class="text-slate-500">NULL</td></tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Slide 3 : RIGHT JOIN -->
-    <div id="slide-3" class="slide">
-        <div class="content">
-            <div class="text-center mb-10">
-                <h2 class="title-font text-5xl font-bold text-white">RIGHT OUTER JOIN</h2>
-                <p class="text-purple-300 text-xl mt-2">Toutes les lignes de la table de droite</p>
-            </div>
-
-            <div class="grid grid-cols-12 gap-12 items-center">
-                <div class="col-span-5">
-                    <div class="venn-container">
-                        <svg width="340" height="210" viewBox="0 0 340 210" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="130" cy="105" r="88" stroke="#c084fc" stroke-width="18" fill="#c084fc" fill-opacity="0.15"/>
-                            <circle cx="210" cy="105" r="88" stroke="#c084fc" stroke-width="18" fill="#c084fc" fill-opacity="0.7"/>
-                            <text x="95" y="95" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">Clients</text>
-                            <text x="245" y="95" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">Commandes</text>
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="col-span-7">
-                    <div class="grid grid-cols-2 gap-8">
-                        <div>
-                            <h3 class="text-white font-bold mb-4 text-lg">Clients (gauche)</h3>
-                            <table class="w-full text-white text-sm">
-                                <tr class="border-b border-slate-600"><th class="text-left py-2">id</th><th class="text-left py-2">nom</th></tr>
-                                <tr><td>1</td><td>Alice</td></tr>
-                                <tr><td>2</td><td>Bob</td></tr>
-                                <tr><td>3</td><td>Charlie</td></tr>
-                            </table>
-                        </div>
-                        <div>
-                            <h3 class="text-white font-bold mb-4 text-lg">Commandes (droite)</h3>
-                            <table class="w-full text-white text-sm">
-                                <tr class="border-b border-slate-600"><th class="text-left py-2">id_client</th><th class="text-left py-2">produit</th></tr>
-                                <tr><td>1</td><td>Ordinateur</td></tr>
-                                <tr><td>2</td><td>Souris</td></tr>
-                                <tr><td>4</td><td>Clavier</td></tr>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="result-box mt-10">
-                        <p class="text-purple-400 font-mono text-sm mb-4">RÉSULTAT RIGHT OUTER JOIN</p>
-                        <table class="w-full text-white text-sm">
-                            <tr class="border-b border-slate-600"><th class="text-left">nom</th><th class="text-left">produit</th></tr>
-                            <tr><td>Alice</td><td>Ordinateur</td></tr>
-                            <tr><td>Bob</td><td>Souris</td></tr>
-                            <tr><td class="text-slate-500">NULL</td><td>Clavier</td></tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Slide 4 : CROSS JOIN -->
-    <div id="slide-4" class="slide">
-        <div class="content">
-            <div class="text-center mb-10">
-                <h2 class="title-font text-5xl font-bold text-white">CROSS JOIN</h2>
-                <p class="text-rose-300 text-xl mt-2">Produit cartésien — Toutes les combinaisons possibles</p>
-            </div>
-
-            <div class="grid grid-cols-12 gap-12 items-center">
-                <div class="col-span-5">
-                    <div class="venn-container">
-                        <svg width="340" height="210" viewBox="0 0 340 210" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="130" cy="105" r="88" stroke="#f43f5e" stroke-width="18" fill="#f43f5e" fill-opacity="0.3"/>
-                            <circle cx="210" cy="105" r="88" stroke="#f43f5e" stroke-width="18" fill="#f43f5e" fill-opacity="0.3"/>
-                            <text x="170" y="115" font-size="52" fill="#fda4af" font-weight="700" text-anchor="middle">✕</text>
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="col-span-7 space-y-8">
-                    <div class="result-box">
-                        <p class="text-rose-400 font-mono text-sm mb-3">Exemple 1 : Clients × Commandes</p>
-                        <p class="text-slate-300">3 clients × 3 commandes = <strong>9 lignes</strong></p>
-                    </div>
-                    <div class="result-box">
-                        <p class="text-rose-400 font-mono text-sm mb-3">Exemple 2 : Couleurs × Tailles</p>
-                        <p class="text-slate-300">3 couleurs × 2 tailles = <strong>6 résultats</strong></p>
-                        <div class="mt-4 text-sm text-rose-200 font-mono">
-                            Rouge + Petit<br>
-                            Rouge + Grand<br>
-                            Bleu + Petit<br>
-                            Bleu + Grand<br>
-                            Vert + Petit<br>
-                            Vert + Grand
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Barre de navigation -->
-    <div class="nav-bar">
-        <button onclick="prevSlide()" class="nav-btn nav-btn-prev">Précédent</button>
-        
-        <div class="text-slate-400 font-medium">
-            Diapositive <span id="current-slide" class="text-white">1</span> sur 5
-        </div>
-
-        <button onclick="nextSlide()" class="nav-btn nav-btn-next">Suivant</button>
+    <!-- Barre de progression en haut -->
+    <div class="progress">
+        <div id="progress-bar" class="progress-bar" style="width: 9.09%;"></div>
     </div>
 
     <script>
         let currentSlide = 0;
-        const totalSlides = 5;
+        const totalSlides = 11;
+        const slides = document.querySelectorAll('.slide');
+
+        function updateUI() {
+            document.getElementById('counter').innerHTML = 
+                `<strong>${currentSlide + 1}</strong> / ${totalSlides}`;
+            
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+        }
 
         function showSlide(n) {
-            document.querySelectorAll('.slide').forEach(slide => slide.classList.remove('active'));
-            document.getElementById(`slide-${n}`).classList.add('active');
-            document.getElementById('current-slide').textContent = n + 1;
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[n].classList.add('active');
             currentSlide = n;
+            updateUI();
         }
 
         function nextSlide() {
@@ -334,14 +279,35 @@
             showSlide(prev);
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            showSlide(0);
-
-            document.addEventListener('keydown', (e) => {
-                if (e.key === "ArrowRight" || e.key === " ") nextSlide();
-                if (e.key === "ArrowLeft") prevSlide();
-            });
+        // Navigation clavier
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "ArrowRight") nextSlide();
+            if (e.key === "ArrowLeft") prevSlide();
         });
+
+        // Swipe sur mobile
+        let touchStartX = 0;
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        document.addEventListener('touchend', e => {
+            const touchEndX = e.changedTouches[0].screenX;
+            if (touchEndX < touchStartX - 70) nextSlide();
+            if (touchEndX > touchStartX + 70) prevSlide();
+        });
+
+        // Clic sur l'image pour passer à la diapo suivante
+        document.addEventListener('click', (e) => {
+            if (e.target.tagName === 'IMG') {
+                nextSlide();
+            }
+        });
+
+        // Initialisation
+        window.onload = () => {
+            updateUI();
+            console.log('%c✅ Présentation Les Jointures chargée avec succès !', 'color:#ef4444; font-size:16px;');
+        };
     </script>
 </body>
 </html>
